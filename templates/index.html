@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block container %}
+    <div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12">   
+        <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl">
+            ¡Bienvenido!
+        </h1>
+        
+        <p class="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48">
+            Has ingresado correctamente al sistema de gestión. Desde aquí puedes administrar los pedidos del día, revisar el inventario de ingredientes y generar los reportes de ventas mensuales. 
+            Utiliza la barra de navegación superior para comenzar.
+        </p>
+
+        <img src="{{url_for('static', filename='img/inicio.png')}}" 
+             alt="Bienvenido a la gestión de pedidos de pizzas" 
+             class="mx-auto mb-6 w-full max-w-md rounded-lg shadow-lg">
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@4.0.1/dist/flowbite.min.js"></script>
+{% endblock %}

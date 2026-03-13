@@ -1,0 +1,16 @@
+{% macro camposNuevos(field) %}
+<div class="mb-4">
+    <label for="{{ field.id }}" class="block mb-2 text-sm font-bold text-gray-900">
+        {{ field.label }}
+    </label>
+    
+    {# Se agregan clases de Tailwind por defecto, pero permite recibir más vía kwargs #}
+    {{ field(class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5", **kwargs) | safe }}
+    
+    {% if field.errors %}
+        {% for error in field.errors %}
+            <p class="mt-2 text-sm text-red-600 font-medium">{{ error }}</p>
+        {% endfor %}
+    {% endif %}
+</div>
+{% endmacro %}

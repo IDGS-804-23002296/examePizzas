@@ -1,0 +1,112 @@
+{% extends "layout.html" %}
+{% import "_macros.html" as macros %}
+
+{% block container %}
+<div class="max-w-6xl mx-auto space-y-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 dark:bg-gray-800 dark:border-gray-700">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="p-2 bg-blue-100 rounded-lg dark:bg-blue-900">
+                    <svg class="w-6 h-6 text-blue-600 dark:text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                </div>
+                <h5 class="text-xl font-bold text-gray-900 dark:text-white">Consulta por día</h5>
+            </div>
+            
+            <form method="POST" class="space-y-4" novalidate>
+                {{ form_dia.csrf_token }}
+                <div>
+                    {{ macros.camposNuevos(form_dia.dia, placeholder="Ej. Lunes") }}
+                </div>
+                <button type="submit" name="consulta_dia" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 transition-colors">
+                    Consultar Día
+                </button>
+            </form>
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 dark:bg-gray-800 dark:border-gray-700">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="p-2 bg-green-100 rounded-lg dark:bg-green-900">
+                    <svg class="w-6 h-6 text-green-600 dark:text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                </div>
+                <h5 class="text-xl font-bold text-gray-900 dark:text-white">Consulta por mes</h5>
+            </div>
+
+            <form method="POST" class="space-y-4" novalidate>
+                {{ form_mes.csrf_token }}
+                <div>
+                    {{ macros.camposNuevos(form_mes.mes, placeholder="Ej. Marzo") }}
+                </div>
+                <button type="submit" name="consulta_mes" class="w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 transition-colors">
+                    Consultar Mes
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden dark:bg-gray-800 dark:border-gray-700">
+        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 flex justify-between items-center">
+            <h5 class="text-lg font-semibold text-gray-900 dark:text-white uppercase tracking-wider">Resultados de Ventas</h5>
+            {% if ventas %}
+            <span class="bg-orange-100 text-orange-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-orange-900 dark:text-orange-300">
+                {{ ventas|length }} Pedidos encontrados
+            </span>
+            {% endif %}
+        </div>
+
+        <div class="relative overflow-x-auto">
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-white dark:bg-gray-800 dark:text-gray-400 border-b">
+                    <tr>
+                        <th scope="col" class="px-6 py-4">Cliente</th>
+                        <th scope="col" class="px-6 py-4">Fecha</th>
+                        <th scope="col" class="px-6 py-4 text-right">Total del Pedido</th>
+                        <th scope="col" class="px-6 py-4 text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for venta in ventas %}
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
+                        <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">
+                            {{ venta.cliente.nombre }}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ venta.fecha }}
+                        </td>
+                        <td class="px-6 py-4 text-right font-bold text-gray-900 dark:text-white">
+                            ${{ "%.2f"|format(venta.total) }}
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            <a href="{{ url_for('ventas.detalle', id=venta.id_pedido) }}" class="text-blue-600 hover:text-blue-800 font-bold uppercase text-xs">
+                                Ver Detalle
+                            </a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="4" class="px-6 py-10 text-center text-gray-500 italic">
+                            No hay registros para esta consulta. Seleccione un filtro arriba.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if total_acumulado %}
+        <div class="p-6 bg-gray-900 text-white flex justify-between items-center">
+            <span class="text-gray-400 uppercase text-sm font-tracking-widest">Total Acumulado de la Consulta</span>
+            <div class="text-right">
+                <h4 class="text-3xl font-black text-orange-400">${{ "%.2f"|format(total_acumulado) }}</h4>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="flex justify-start">
+        <a href="{{ url_for('pedidos.index') }}" class="inline-flex items-center text-gray-600 hover:text-orange-600 font-medium transition-colors">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            Volver al Registro de Pedidos
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block container %}
+<div class="min-h-[70vh] flex flex-col items-center justify-center text-center px-4">
+    <div class="relative mb-8">
+        <div class="absolute inset-0 bg-orange-500/20 blur-3xl rounded-full"></div>
+        <img src="{{url_for('static', filename='img/404.png')}}" 
+             alt="Página no encontrada" 
+             class="relative z-10 max-w-xs md:max-w-md animate-pulse">
+    </div>
+
+    <div class="space-y-4">
+        <h1 class="text-6xl md:text-8xl font-black text-white tracking-tighter">
+            404
+        </h1>
+        <h2 class="text-2xl md:text-3xl font-bold text-orange-500 uppercase tracking-widest">
+            Página no encontrada
+        </h2>
+        <p class="text-black max-w-md mx-auto text-lg italic">
+            "Parece que esta pizza no está en nuestro menú. El enlace que seguiste podría estar roto o la página fue movida."
+        </p>
+    </div>
+
+    <div class="mt-10">
+        <a href="{{ url_for('index') }}" 
+           class="inline-flex items-center bg-slate-800 hover:bg-slate-700 text-white font-bold py-4 px-8 rounded-lg border border-slate-600 transition-all transform hover:scale-105 active:scale-95 shadow-2xl uppercase tracking-wider">
+            <svg class="w-5 h-5 mr-3 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            Volver al Inicio
+        </a>
+    </div>
+</div>
+
+<style>
+    @keyframes pulse-slow {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+    .animate-pulse {
+        animation: pulse-slow 3s ease-in-out infinite;
+    }
+</style>
+{% endblock %}

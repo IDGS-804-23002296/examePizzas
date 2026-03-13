@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block container %}
+<div class="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700">
+    <div class="p-6 bg-gray-900 text-white flex justify-between items-center">
+        <div>
+            <h2 class="text-2xl font-black uppercase italic">Detalle de Venta #{{ pedido.id_pedido }}</h2>
+            <p class="text-gray-400 text-sm">Cliente: {{ pedido.cliente.nombre }} | Fecha: {{ pedido.fecha }}</p>
+        </div>
+        <a href="{{ url_for('ventas.index') }}" class="text-sm bg-gray-700 px-4 py-2 rounded hover:bg-gray-600 transition-colors">Cerrar</a>
+    </div>
+
+    <div class="relative overflow-x-auto">
+        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th class="px-6 py-4">Tamaño</th>
+                    <th class="px-6 py-4">Ingredientes</th>
+                    <th class="px-6 py-4 text-center">Cantidad</th>
+                    <th class="px-6 py-4 text-right">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for d in detalles %}
+                <tr class="border-b dark:border-gray-700">
+                    <td class="px-6 py-4 font-bold text-gray-900 dark:text-white">{{ d.pizza.tamano }}</td>
+                    <td class="px-6 py-4 italic">{{ d.pizza.ingredientes }}</td>
+                    <td class="px-6 py-4 text-center">{{ d.cantidad }}</td>
+                    <td class="px-6 py-4 text-right font-bold text-gray-900 dark:text-white">${{ "%.2f"|format(d.subtotal) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr class="bg-gray-50 dark:bg-gray-900">
+                    <td colspan="3" class="px-6 py-4 text-right font-bold uppercase text-gray-900 dark:text-white">Total Final:</td>
+                    <td class="px-6 py-4 text-right font-black text-xl text-orange-500">${{ "%.2f"|format(pedido.total) }}</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+{% endblock %}
